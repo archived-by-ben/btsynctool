@@ -30,10 +30,8 @@ Options:
   -C                             Prints the BitTorrent Sync configuration file.
   -l, --log                      Prints the last 10 lines of the log file.
   -L=K                           Prints the last K lines of the log file.
-  -f, --follow                   Prints the last 10 lines of the log file and append data as the
-                                  file grows.
-  -F=K                           Prints the last K lines of the log file and append data as the
-                                  file grows.
+  -f, --follow                   Prints the last 10 lines of the log file and append data as the file grows.
+  -F=K                           Prints the last K lines of the log file and append data as the file grows.
   -s, --generate-secrets         Generate a new write secret and display its read secret.
   -v, --version                  Displays the version of btsynctool daemon.
   -h, --help                     Print this message and exit.
