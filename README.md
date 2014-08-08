@@ -30,14 +30,28 @@ Options:
   -C                             Prints the BitTorrent Sync configuration file.
   -l, --log                      Prints the last 10 lines of the log file.
   -L=K                           Prints the last K lines of the log file.
-  -f, --follow                   Prints the last 10 lines of the log file and append data as the file grows.
-  -F=K                           Prints the last K lines of the log file and append data as the file grows.
+  -f, --follow                   Prints the last 10 lines of the log file and append data as the
+                                  file grows.
+  -F=K                           Prints the last K lines of the log file and append data as the
+                                  file grows.
   -s, --generate-secrets         Generate a new write secret and display its read secret.
   -v, --version                  Displays the version of btsynctool daemon.
   -h, --help                     Print this message and exit.
 ```
 
 ####Sample screenshots
+
+![btsynctool --help](https://raw.githubusercontent.com/bengarrett/btsynctool/master/screenshots/btsynctool--help.png)
+
+![btsynctool --config](https://github.com/bengarrett/btsynctool/blob/master/screenshots/btsynctool-C.png)
+
+![btsynctool -s](https://raw.githubusercontent.com/bengarrett/btsynctool/master/screenshots/btsynctool-s.png)
+
+![btsynctool -v](https://raw.githubusercontent.com/bengarrett/btsynctool/master/screenshots/btsynctool-v.png)
+
+![btsynctool -l](https://raw.githubusercontent.com/bengarrett/btsynctool/master/screenshots/btsynctool-l.png)
+
+![btsynctool -f](https://raw.githubusercontent.com/bengarrett/btsynctool/master/screenshots/btsynctool-f.png)
 
 ####Licence
 [The MIT License (MIT)](http://opensource.org/licenses/MIT)
