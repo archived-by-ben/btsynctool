@@ -21,8 +21,8 @@ Before beginning there are a number of variables that need to be configured. The
 * `LOG=`    The path to the BitTorrent Sync log file.
 
 The tool has 8 options plus a help display.
-
-```Usage:
+```
+Usage:
   btsynctool [OPTION]
 
 Options:
@@ -34,7 +34,8 @@ Options:
   -F=K                           Prints the last K lines of the log file and append data as the file grows.
   -s, --generate-secrets         Generate a new write secret and display its read secret.
   -v, --version                  Displays the version of btsynctool daemon.
-  -h, --help                     Print this message and exit.```
+  -h, --help                     Print this message and exit.
+```
 
 ####Sample screenshots
 
