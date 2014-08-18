@@ -13,7 +13,7 @@ This script simplifies the interaction with the BitTorrent Sync daemon for Linux
 * Generate combined write and read only secrets.
 * Display the version of the daemon.
 
-It is tested with BitTorrent Sync version 1.3.106.
+It is tested with BitTorrent Sync version 1.3.109.
 
 ####Getting Started
 Before beginning there are a number of variables that need to be configured. These that can be found at the top of the script `btsynctool`.
