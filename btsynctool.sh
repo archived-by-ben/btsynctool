@@ -1,22 +1,44 @@
 #!/bin/bash
 # /usr/local/bin/btsynctool
+# version 1.10
 # A number of short-cuts to interact with the BitTorrent Sync daemon.
 # Tested on Ubuntu 14.04 and BitTorrent Sync 1.3.*.
 # Optional support for ANSI colour output using the source-highlight package.
 # Use sudo apt-get install source-highlight to install.
 
-DESC="BitTorrent Sync"
-CONFIG=/opt/btsync/btsync.conf
+# Change these values to match your BitTorrent Sync installation
+
+# Path to the program or binary file
 DAEMON=/opt/btsync/btsync
+
+# Path to the configuration file
+CONFIG=/opt/btsync/btsync.conf
+
+# Path to the .sync settings folder
+SYNC=/opt/btsync/.sync
+
+# Path to the log file
+LOG=$SYNC/sync.log
+
+# Path to your favourite text editor
 EDITOR=/usr/bin/nano
-LOG=/opt/btsync/.sync/sync.log
+
+# The following values should not be changed
+
+# The description and the process name
+DESC="BitTorrent Sync"
+PROCESS="btsync"
+
+# BitTorrent Sync debug mode trigger file and body 
+DEBUGFILE=$SYNC/debug.txt
+DEBUGTRIGGER="FFFF"
 
 # Script name
 BASE="$(basename $0)"
 
 # getopt arguments
 # Tutorial http://linuxaria.com/howto/parse-options-in-your-bash-script-with-getopt
-PARSED_OPTIONS=$(getopt -n "$0" -o hscClL:fF:v --long "help,generate-secrets,config,log::,follow,version" -- "$@")
+PARSED_OPTIONS=$(getopt -n "$0" -o hscCrlL:fF:dDv --long "help,generate-secrets,config,restart,log::,follow,debug-logging,debug-off,version" -- "$@")
 
 # Bad arguments, something has gone wrong with getopt command.
 if [ $? -ne 0 ]; then
@@ -51,6 +73,50 @@ sourceHighlight() {
  fi
 }
 
+# Check if BitTorrent Sync is in debug logging mode
+debugLogging() {
+  # check if $DEBUGFILE exists
+  if [ -f "$DEBUGFILE" ]; then
+    # save content of $DEBUGFILE to local variable
+    local debugbody=$(<$DEBUGFILE)
+    # compare content of $DEBUGFILE to $DEBUGTRIGGER
+    if [ "$debugbody" = "$DEBUGTRIGGER" ]; then
+      return 0
+    else
+      return 1
+    fi
+ else
+  return 1
+ fi
+}
+
+# Restart BitTorrent Sync
+restartDaemon() {
+  local processid=$(pgrep -x $PROCESS)
+  echo "Restart $DESC:"
+  if [ ! $processid = "" ]; then
+    local args=$(ps -C $PROCESS --no-headers -o cmd)
+    echo "Running as process '$PROCESS'. pid = $processid"
+    echo "Will restart $PROCESS using the following arguments"
+    echo "$args"
+    echo ""
+    echo "* Stopping $DESC daemon $PROCESS"
+    pkill -9 -e -x $PROCESS
+    if ps $processid > /dev/null; then
+      echo "Could not shutdown $PROCESS"
+      echo "Maybe there is a permissions problem?"
+    else
+      echo "* Starting $DESC daemon $PROCESS"
+      echo ""
+      $args
+    fi
+  else
+    echo "$DESC is not running so it will be started in daemon mode"
+    echo ""
+    $DAEMON --config $CONFIG
+  fi
+}
+
 # Process script arguments
 case "$1" in
  -h|--help)
@@ -58,19 +124,24 @@ case "$1" in
   printf "\nUsage:"
   printf "\n  $BASE [OPTION]"
   printf "\n\nOptions:"
-  printf "\n  -c, --config\t\t\t Edits the $DESC configuration file."
+  printf "\n  -c, --config\t\t\t Edits the $DESC configuration file. *"
   printf "\n  -C\t\t\t\t Prints the $DESC configuration file."
+  printf "\n  -r, --restart\t\t\t Restarts $DESC, needed to apply any configuration changes."
   printf "\n  -l, --log\t\t\t Prints the last 10 lines of the log file."
   printf "\n  -L=K\t\t\t\t Prints the last K lines of the log file."
   printf "\n  -f, --follow\t\t\t Prints the last 10 lines of the log file and append data as the file grows."
   printf "\n  -F=K\t\t\t\t Prints the last K lines of the log file and append data as the file grows."
+  printf "\n  -d  --debug-logging\t\t Switches $DESC into debug logging mode. *"
+  printf "\n  -D  --debug-off\t\t Switches $DESC into standard logging mode. *"
   printf "\n  -s, --generate-secrets\t Generate a new write secret and display its read secret."
-  printf "\n  -v, --version\t\t\t Displays the version of $BASE daemon."
-  printf "\n  -h, --help\t\t\t Print this message and exit.\n"
+  printf "\n  -v, --version\t\t\t Displays the version and process of $DESC."
+  printf "\n  -h, --help\t\t\t Print this message and exit."
+  printf "\n\n\t\t\t\t * $DESC will need to be restarted before the changes take effect.\n"
   ;;
  -c|--config)
   echo "Configure $DESC:"
   $EDITOR "$CONFIG"
+  echo "It will need to be restarted before any saved changes take effect."
   ;;
  -C)
   echo "Configuration for $DESC:"
@@ -79,6 +150,9 @@ case "$1" in
   else
    cat "$CONFIG"
   fi
+  ;;
+ -r|--restart)
+  restartDaemon
   ;;
  -l|--log)
   echo "Print the last 10 lines of log:"
@@ -98,6 +172,7 @@ case "$1" in
   ;;
  -f|--follow)
   echo "Print and follow 10 lines of log:"
+  echo "Press CTRL-C to exit"
   if colorTerm && sourceHighlight; then
    source-highlight -f esc -s syslog -i $LOG | tail -f $LOG
   else
@@ -106,10 +181,37 @@ case "$1" in
   ;;
  -F)
   echo "Print and follow $2 lines of log:"
+  echo "Press CTRL-C to exit"
   if colorTerm && sourceHighlight; then
    source-highlight -f esc -s syslog -i $LOG | tail -f -n $2 $LOG
   else
    tail -f -n $2 $LOG
+  fi
+  ;;
+ -d|--debug-logging)
+  echo "Switch into debug logging mode:"
+  if debugLogging; then
+    echo "$DESC is already in debug logging mode"
+  else
+    echo "$DEBUGTRIGGER" > $DEBUGFILE
+    if debugLogging; then
+      echo "Now in debug logging mode"
+      echo "$DESC will need to be restarted before any saved changes take effect"
+    else
+      echo "Could not write '$DEBUGTRIGGER' to the file $DEBUGFILE"
+      echo "Maybe there is a permissions problem?"
+    fi
+  fi
+  ;;
+ -D|--debug-off)
+  echo "Switch out of debug logging mode:"
+  : > $DEBUGFILE
+  if ! debugLogging; then
+    echo "Now in normal logging mode"
+    echo "$DESC will need to be restarted before any saved changes take effect"
+  else
+    echo "Could not write to the file $DEBUGFILE"
+    echo "Maybe there is a permissions problem?"
   fi
   ;;
  -s|--generate-secrets)
@@ -122,6 +224,7 @@ case "$1" in
   ;;
  -v|--version)
   $DAEMON --help | head -1
+  ps -C btsync -f
   ;;
  *)
  echo "$BASE: invalid usage"
