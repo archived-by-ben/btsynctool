@@ -6,8 +6,10 @@ A shell script to simplify interactions with the BitTorrent Sync daemon.
 ####Introduction
 This script simplifies the interaction with the BitTorrent Sync daemon for Linux. It handles the following functions.
 * Quickly edit the BitTorrent Sync configuration file.
+* Restart the daemon to apply any new configurations.
 * Display the configuration file on screen.
 * Display the tail of the log file on screen, both static and as it grows.
+* Trigger the debug logging mode.
 * Generate combined write and read only secrets.
 * Display the version of the daemon.
 
