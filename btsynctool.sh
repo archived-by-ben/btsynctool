@@ -1,6 +1,7 @@
 #!/bin/bash
-# /usr/local/bin/btsynctool
-# version 1.10
+# /usr/local/bin/btsynctool version 1.10
+# https://github.com/bengarrett/btsynctool
+#
 # A number of short-cuts to interact with the BitTorrent Sync daemon.
 # Tested on Ubuntu 14.04 and BitTorrent Sync 1.3.*.
 # Optional support for ANSI colour output using the source-highlight package.
