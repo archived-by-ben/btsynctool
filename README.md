@@ -5,7 +5,7 @@ A shell script to simplify interactions with the BitTorrent Sync daemon.
 
 ####Introduction
 This script simplifies the interaction with the BitTorrent Sync daemon for Linux. It handles the following functions.
-* Quickly edit the BitTorrent Sync configuration file.
+* Quickly create and edit the BitTorrent Sync configuration file.
 * Restart the daemon to apply any new configurations.
 * Display the configuration file on screen.
 * Display the tail of the log file on screen, both static and as it grows.
@@ -13,7 +13,7 @@ This script simplifies the interaction with the BitTorrent Sync daemon for Linux
 * Generate combined write and read only secrets.
 * Display the version of the daemon.
 
-It is tested with BitTorrent Sync version 1.3.109.
+It is tested with BitTorrent Sync version 1.4.99.
 
 ####Getting Started
 Before beginning there are a number of variables that need to be configured. These that can be found at the top of the script `btsynctool`.
@@ -29,6 +29,7 @@ Usage:
   btsynctool [OPTION]
 
 Options:
+  -S, --generate-config          Creates a BitTorrent Sync sample configuration file. * 
   -c, --config                   Edits the BitTorrent Sync configuration file. *
   -C                             Prints the BitTorrent Sync configuration file.
   -r, --restart                  Restarts BitTorrent Sync, needed to apply any configuration changes.

@@ -1,9 +1,9 @@
 #!/bin/bash
-# /usr/local/bin/btsynctool version 1.10
+# /usr/local/bin/btsynctool version 1.20
 # https://github.com/bengarrett/btsynctool
 #
 # A number of short-cuts to interact with the BitTorrent Sync daemon.
-# Tested on Ubuntu 14.04 and BitTorrent Sync 1.3.*.
+# Tested on Ubuntu 14.10 and BitTorrent Sync 1.4.*.
 # Optional support for ANSI colour output using the source-highlight package.
 # Use sudo apt-get install source-highlight to install.
 
@@ -39,7 +39,7 @@ BASE="$(basename $0)"
 
 # getopt arguments
 # Tutorial http://linuxaria.com/howto/parse-options-in-your-bash-script-with-getopt
-PARSED_OPTIONS=$(getopt -n "$0" -o hscCrlL:fF:dDv --long "help,generate-secrets,config,restart,log::,follow,debug-logging,debug-off,version" -- "$@")
+PARSED_OPTIONS=$(getopt -n "$0" -o hSscCrlL:fF:dDv --long "help,generate-config,generate-secrets,config,restart,log::,follow,debug-logging,debug-off,version" -- "$@")
 
 # Bad arguments, something has gone wrong with getopt command.
 if [ $? -ne 0 ]; then
@@ -91,6 +91,11 @@ debugLogging() {
  fi
 }
 
+# Notice for the need to restart BitTorrent Sync
+requestRestart() {
+  echo "$DESC will need to be restarted before any saved changes take effect"
+}
+
 # Restart BitTorrent Sync
 restartDaemon() {
   local processid=$(pgrep -x $PROCESS)
@@ -125,6 +130,7 @@ case "$1" in
   printf "\nUsage:"
   printf "\n  $BASE [OPTION]"
   printf "\n\nOptions:"
+  printf "\n  -S, --generate-config\t\t Creates a $DESC sample configuration file. *"
   printf "\n  -c, --config\t\t\t Edits the $DESC configuration file. *"
   printf "\n  -C\t\t\t\t Prints the $DESC configuration file."
   printf "\n  -r, --restart\t\t\t Restarts $DESC, needed to apply any configuration changes."
@@ -139,10 +145,26 @@ case "$1" in
   printf "\n  -h, --help\t\t\t Print this message and exit."
   printf "\n\n\t\t\t\t * $DESC will need to be restarted before the changes take effect.\n"
   ;;
+ -S|--generate-config)
+  echo "Create $DESC sample configuration:"
+  if [ -f "$CONFIG" ]; then
+   echo "Ignoring request to create a sample configuration file as $CONFIG already exists"
+  else
+    echo "Print sample configuration file and save it as $CONFIG"
+    $DAEMON --dump-sample-config | tee $CONFIG
+    if [ -f "$CONFIG" ]; then
+      echo "Sample configuration saved as $CONFIG"
+      requestRestart
+    else
+      echo "Could not write to the file $CONFIG"
+      echo "Maybe there is a permissions problem?"
+    fi
+  fi
+  ;;
  -c|--config)
   echo "Configure $DESC:"
   $EDITOR "$CONFIG"
-  echo "It will need to be restarted before any saved changes take effect."
+  requestRestart
   ;;
  -C)
   echo "Configuration for $DESC:"
@@ -197,7 +219,7 @@ case "$1" in
     echo "$DEBUGTRIGGER" > $DEBUGFILE
     if debugLogging; then
       echo "Now in debug logging mode"
-      echo "$DESC will need to be restarted before any saved changes take effect"
+      requestRestart
     else
       echo "Could not write '$DEBUGTRIGGER' to the file $DEBUGFILE"
       echo "Maybe there is a permissions problem?"
@@ -205,14 +227,18 @@ case "$1" in
   fi
   ;;
  -D|--debug-off)
-  echo "Switch out of debug logging mode:"
-  : > $DEBUGFILE
+  echo "Switch into normal logging mode:"
   if ! debugLogging; then
-    echo "Now in normal logging mode"
-    echo "$DESC will need to be restarted before any saved changes take effect"
+    echo "$DESC is already in normal logging mode"
   else
-    echo "Could not write to the file $DEBUGFILE"
-    echo "Maybe there is a permissions problem?"
+    : > $DEBUGFILE
+    if ! debugLogging; then
+      echo "Now in normal logging mode"
+      requestRestart
+    else
+      echo "Could not write to the file $DEBUGFILE"
+      echo "Maybe there is a permissions problem?"
+    fi
   fi
   ;;
  -s|--generate-secrets)
@@ -229,7 +255,7 @@ case "$1" in
   ;;
  *)
  echo "$BASE: invalid usage"
- echo "Try '$BASE --help' or '$BASE -h' for more information."
+ echo "Try '$BASE --help' or '$BASE -h' for more information"
   exit 1
  ;;
 esac
