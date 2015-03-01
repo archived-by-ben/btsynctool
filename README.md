@@ -48,17 +48,23 @@ Options:
 
 ####Sample screenshots
 
-![btsynctool --help](https://raw.githubusercontent.com/bengarrett/btsynctool/master/screenshots/btsynctool--help.png)
+##### Help
+![btsynctool--help](https://cloud.githubusercontent.com/assets/513842/6430192/7afea28a-c053-11e4-8386-c2bcc1991d10.png)
 
-![btsynctool --config](https://github.com/bengarrett/btsynctool/blob/master/screenshots/btsynctool-C.png)
+##### Configuration
+![btsynctool-c](https://cloud.githubusercontent.com/assets/513842/6430189/7aca3e1e-c053-11e4-99c4-68bcb7f85126.png)
 
-![btsynctool -s](https://raw.githubusercontent.com/bengarrett/btsynctool/master/screenshots/btsynctool-s.png)
+##### Log file follow
+![btsynctool-f](https://cloud.githubusercontent.com/assets/513842/6430190/7acd5176-c053-11e4-9351-26d68ff98851.png)
 
-![btsynctool -v](https://raw.githubusercontent.com/bengarrett/btsynctool/master/screenshots/btsynctool-v.png)
+##### Log file
+![btsynctool-l](https://cloud.githubusercontent.com/assets/513842/6430193/7affc3cc-c053-11e4-99cd-79df2fe96c88.png)
 
-![btsynctool -l](https://raw.githubusercontent.com/bengarrett/btsynctool/master/screenshots/btsynctool-l.png)
+##### Generate secrets
+![btsynctool-s](https://cloud.githubusercontent.com/assets/513842/6430194/7b2d32bc-c053-11e4-99c6-e84e4ad9eca4.png)
 
-![btsynctool -f](https://raw.githubusercontent.com/bengarrett/btsynctool/master/screenshots/btsynctool-f.png)
+##### Version
+![btsynctool-v](https://cloud.githubusercontent.com/assets/513842/6430195/7b316076-c053-11e4-8156-f899fbd96c7a.png)
 
 ####Licence
 [The MIT License (MIT)](http://opensource.org/licenses/MIT)
