@@ -1,11 +1,12 @@
 #!/bin/bash
-# /usr/local/bin/btsynctool version 1.20
-# https://github.com/bengarrett/btsynctool
+# /usr/local/bin/btsynctool
+# version 2 - https://github.com/bengarrett/btsynctool
 #
 # A number of short-cuts to interact with the BitTorrent Sync daemon.
-# Tested on Ubuntu 14.10 and BitTorrent Sync 1.4.*.
+# Tested on Ubuntu 14.10 with BitTorrent Sync 1.4.111 and 2.0.99.
 # Optional support for ANSI colour output using the source-highlight package.
-# Use sudo apt-get install source-highlight to install.
+# Use 'sudo apt-get install source-highlight' to install on Ubuntu/Debian
+# Use 'sudo yum install source-highlight' to install on CentOS/RedHat/Fedora
 
 # Change these values to match your BitTorrent Sync installation
 
@@ -108,8 +109,16 @@ restartDaemon() {
     echo ""
     echo "* Stopping $DESC daemon $PROCESS"
     pkill -9 -e -x $PROCESS
+    for i in {1..5}
+    do
+      if ps $processid > /dev/null; then
+      sleep 1s
+      else
+      break
+      fi
+    done
     if ps $processid > /dev/null; then
-      echo "Could not shutdown $PROCESS"
+      echo "Could not shut down $PROCESS"
       echo "Maybe there is a permissions problem?"
     else
       echo "* Starting $DESC daemon $PROCESS"
@@ -197,18 +206,18 @@ case "$1" in
   echo "Print and follow 10 lines of log:"
   echo "Press CTRL-C to exit"
   if colorTerm && sourceHighlight; then
-   source-highlight -f esc -s syslog -i $LOG | tail -f $LOG
+   source-highlight -f esc -s syslog -i $LOG | tail -F $LOG
   else
-   tail -f $LOG
+   tail -F $LOG
   fi
   ;;
  -F)
   echo "Print and follow $2 lines of log:"
   echo "Press CTRL-C to exit"
   if colorTerm && sourceHighlight; then
-   source-highlight -f esc -s syslog -i $LOG | tail -f -n $2 $LOG
+   source-highlight -f esc -s syslog -i $LOG | tail -F -n $2 $LOG
   else
-   tail -f -n $2 $LOG
+   tail -F -n $2 $LOG
   fi
   ;;
  -d|--debug-logging)
@@ -250,7 +259,11 @@ case "$1" in
   printf "\n"
   ;;
  -v|--version)
-  $DAEMON --help | head -1
+  v="$($DAEMON --help | head -1)" # btsync v1.*
+  if [ -z "$v" ]; then
+    v="$($DAEMON --help | head -2)" # btsync v2.*
+  fi
+  echo $v
   ps -C btsync -f
   ;;
  *)

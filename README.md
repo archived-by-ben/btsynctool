@@ -13,7 +13,7 @@ This script simplifies the interaction with the BitTorrent Sync daemon for Linux
 * Generate combined write and read only secrets.
 * Display the version of the daemon.
 
-It is tested with BitTorrent Sync version 1.4.99.
+It is tested with BitTorrent Sync version 2.0.93 and 1.4.111.
 
 ####Getting Started
 Before beginning there are a number of variables that need to be configured. These that can be found at the top of the script `btsynctool`.
@@ -46,7 +46,12 @@ Options:
                                  * BitTorrent Sync will need to be restarted before the changes take effect.
 ```
 
-####Sample screenshots
+###### Add colour syntax for configuration output
+Ubuntu/Debian: `sudo apt-get install source-highlight`
+CentOS/RedHat/Fedora: `sudo yum install source-highlight`
+For other distributions the [source highlight website](https://www.gnu.org/software/src-highlite/) has compile instructions.
+
+#### Sample screen shots
 
 ##### Help
 ![btsynctool--help](https://cloud.githubusercontent.com/assets/513842/6430192/7afea28a-c053-11e4-8386-c2bcc1991d10.png)
@@ -66,6 +71,9 @@ Options:
 ##### Version
 ![btsynctool-v](https://cloud.githubusercontent.com/assets/513842/6430195/7b316076-c053-11e4-8156-f899fbd96c7a.png)
 
+####What's new and previous releases
+[Releases](https://github.com/bengarrett/btsynctool/releases)
+
 ####Licence
 [The MIT License (MIT)](http://opensource.org/licenses/MIT)
-Copyright (c) 2014 Ben Garrett
+Copyright (c) 2015 Ben Garrett
