@@ -24,6 +24,7 @@ It is tested with BitTorrent Sync version 2.0.93 and 1.4.111.
 cd ~
 wget https://github.com/bengarrett/btsynctool/archive/master.zip
 unzip master.zip
+cd btsynctool-master/
 ```
 ######Configure
 ```
