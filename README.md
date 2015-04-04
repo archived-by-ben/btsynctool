@@ -15,6 +15,27 @@ This script simplifies the interaction with the BitTorrent Sync daemon for Linux
 
 It is tested with BitTorrent Sync version 2.0.93 and 1.4.111.
 
+####What's new
+[Releases](https://github.com/bengarrett/btsynctool/releases)
+
+####Install and configure on Ubuntu/Debian
+######Download
+```
+cd ~
+wget https://github.com/bengarrett/btsynctool/archive/master.zip
+unzip master.zip
+```
+######Configure
+```
+chmod +x btsynctool.sh
+nano -B btsynctool.sh
+```
+######Install and test
+```
+sudo cp btsynctool.sh /usr/local/bin/btsynctool
+btsynctool -h
+```
+
 ####Getting Started
 Before beginning there are a number of variables that need to be configured. These that can be found at the top of the script `btsynctool`.
 * `DAEMON=` The path to the BitTorrent Sync daemon (application).
@@ -47,8 +68,11 @@ Options:
 ```
 
 ###### Add colour syntax for configuration output
+
 Ubuntu/Debian: `sudo apt-get install source-highlight`
+
 CentOS/RedHat/Fedora: `sudo yum install source-highlight`
+
 For other distributions the [source highlight website](https://www.gnu.org/software/src-highlite/) has compile instructions.
 
 #### Sample screen shots
@@ -70,9 +94,6 @@ For other distributions the [source highlight website](https://www.gnu.org/softw
 
 ##### Version
 ![btsynctool-v](https://cloud.githubusercontent.com/assets/513842/6430195/7b316076-c053-11e4-8156-f899fbd96c7a.png)
-
-####What's new and previous releases
-[Releases](https://github.com/bengarrett/btsynctool/releases)
 
 ####Licence
 [The MIT License (MIT)](http://opensource.org/licenses/MIT)
