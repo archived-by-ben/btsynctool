@@ -3,7 +3,7 @@ btsynctool
 
 A shell script to simplify interactions with the BitTorrent Sync daemon.
 
-####Introduction
+#### Introduction
 This script simplifies the interaction with the BitTorrent Sync daemon for Linux. It handles the following functions.
 * Quickly create and edit the BitTorrent Sync configuration file.
 * Restart the daemon to apply any new configurations.
@@ -15,29 +15,29 @@ This script simplifies the interaction with the BitTorrent Sync daemon for Linux
 
 It is tested with BitTorrent Sync version 2.0.93 and 1.4.111.
 
-####What's new
+#### What's new
 [Releases](https://github.com/bengarrett/btsynctool/releases)
 
-####Install and configure on Ubuntu/Debian
-######Download
+#### Install and configure on Ubuntu/Debian
+###### Download
 ```
 cd ~
 wget https://github.com/bengarrett/btsynctool/archive/master.zip
 unzip master.zip
 cd btsynctool-master/
 ```
-######Configure
+###### Configure
 ```
 chmod +x btsynctool.sh
 nano -B btsynctool.sh
 ```
-######Install and test
+###### Install and test
 ```
 sudo cp btsynctool.sh /usr/local/bin/btsynctool
 btsynctool -h
 ```
 
-####Getting Started
+#### Getting Started
 Before beginning there are a number of variables that need to be configured. These that can be found at the top of the script `btsynctool`.
 * `DAEMON=` The path to the BitTorrent Sync daemon (application).
 * `CONFIG=` The path to the BitTorrent Sync configuration file (JSON document).
@@ -96,6 +96,6 @@ For other distributions the [source highlight website](https://www.gnu.org/softw
 ##### Version
 ![btsynctool-v](https://cloud.githubusercontent.com/assets/513842/6430195/7b316076-c053-11e4-8156-f899fbd96c7a.png)
 
-####Licence
+#### Licence
 [The MIT License (MIT)](http://opensource.org/licenses/MIT)
 Copyright (c) 2015 Ben Garrett
